@@ -1,0 +1,58 @@
+---
+title: "Ejercicio 3. Gráfico de Líneas"
+author: "Omar Rodriguez Alvarez"
+dni: "48679912-K"
+date: "2022-11-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Ejercicio 3. Ejercicios Gráfico de Líneas
+
+Elige dos nombres, y crea un gráfico de líneas que consideres interesante. No tienes porque utilizar todos los años.
+
+A continuación, te muestro un gráfico con esta base de datos, disponible en la literatura, que muestra la evolución de dos nombres. Tu gráfico no tiene porqué parecerse a este. De hecho, sería más intersante que no se pareciese.
+
+## Grafico de lineas
+
+```{r}
+
+# Instalar paquetes y librerias con repos para que no salga error
+
+install.packages("babynames", repos = "http://cran.us.r-project.org")
+install.packages("ggrepel", repos = "http://cran.us.r-project.org")
+install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+install.packages('ggplot2', repos = "http://cran.us.r-project.org")
+library(babynames)
+library(ggrepel)
+library(tidyverse)
+library(ggplot2)
+
+data <- babynames %>% 
+  filter(name %in% c("Elizabeth", "Margaret")) %>%
+  filter(sex=="F") %>%
+  filter(year>1960) %>%
+  select(year, name, n) %>%
+  spread(key = name, value=n, -1)
+
+# Select a few date to label the chart
+tmp_date <- data %>% sample_frac(0.3)
+
+# plot 
+data %>% 
+  ggplot(aes(x=Margaret, y=Elizabeth, label=year)) +
+     geom_point(color="red") +
+     geom_text_repel(data=tmp_date) +
+     geom_segment(color="black", 
+                  aes(
+                    xend=c(tail(Margaret, n=-1), NA), 
+                    yend=c(tail(Elizabeth, n=-1), NA)
+                  ),
+                  arrow=arrow(length=unit(0.3,"cm"))
+      )
+
+```
+

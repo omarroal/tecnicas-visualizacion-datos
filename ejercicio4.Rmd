@@ -1,0 +1,57 @@
+---
+title: "prueba2"
+author: "Omar Rodriguez"
+date: "2022-11-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Ejercicio 4
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+```{r}
+
+install.packages('babynames', repos = "http://cran.us.r-project.org")
+install.packages('ggplot2', repos = "http://cran.us.r-project.org")
+install.packages('tidyverse', repos = "http://cran.us.r-project.org")
+library(babynames)
+library(tidyverse)
+library(ggplot2)
+
+datos=read.csv2("EsperanzaVidayNatalidadCA.csv")
+head(datos)
+
+nome <- babynames
+head(nome)
+
+nome1 <- nome %>%
+  filter(year == '1990'& sex == 'F') %>%
+  arrange(desc(n))
+  
+head(nome1, 5)
+
+babynames %>%
+  filter(sex=="F") %>%
+  group_by(name) %>%
+  summarize(total = sum(n)) %>%
+  arrange(desc(total)) 
+
+babynames %>%
+  filter(sex=="F") %>%
+  filter(name=="Ana" | name=="Mary" | name=="Jessica") %>% 
+  ggplot(., aes(year, n)) +
+  geom_line(aes(color=name), lwd=1) +
+  theme_bw()
+
+```
+
